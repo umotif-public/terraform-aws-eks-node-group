@@ -91,6 +91,7 @@ resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSServicePolicy" {
 module "eks-node-group" {
   source = "../../"
 
+  enabled      = true
   cluster_name = aws_eks_cluster.cluster.id
 
   subnet_ids = flatten([module.vpc.private_subnets])

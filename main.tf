@@ -1,4 +1,6 @@
 resource "random_id" "main" {
+  count = var.enabled ? 1 : 0
+
   byte_length = 4
 
   keepers = {
@@ -16,8 +18,10 @@ resource "random_id" "main" {
 }
 
 resource "aws_eks_node_group" "main" {
+  count = var.enabled ? 1 : 0
+
   cluster_name    = var.cluster_name
-  node_group_name = join("-", [var.cluster_name, random_id.main.id])
+  node_group_name = join("-", [var.cluster_name, random_id.main[0].id])
   node_role_arn   = var.node_role_arn == "" ? join("", aws_iam_role.main.*.arn) : var.node_role_arn
 
   subnet_ids = var.subnet_ids
@@ -53,8 +57,9 @@ resource "aws_eks_node_group" "main" {
 }
 
 resource "aws_iam_role" "main" {
-  count = var.node_role_arn == "" ? 1 : 0
-  name  = "${var.cluster_name}-managed-group-node"
+  count = var.enabled && var.create_iam_role ? 1 : 0
+
+  name = "${var.cluster_name}-managed-group-node"
 
   assume_role_policy = <<EOF
 {
@@ -73,19 +78,22 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "main_AmazonEKSWorkerNodePolicy" {
-  count      = var.node_role_arn == "" ? 1 : 0
+  count = var.enabled && var.create_iam_role ? 1 : 0
+
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.main[0].name
 }
 
 resource "aws_iam_role_policy_attachment" "main_AmazonEKS_CNI_Policy" {
-  count      = var.node_role_arn == "" ? 1 : 0
+  count = var.enabled && var.create_iam_role ? 1 : 0
+
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = aws_iam_role.main[0].name
 }
 
 resource "aws_iam_role_policy_attachment" "main_AmazonEC2ContainerRegistryReadOnly" {
-  count      = var.node_role_arn == "" ? 1 : 0
+  count = var.enabled && var.create_iam_role ? 1 : 0
+
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.main[0].name
 }

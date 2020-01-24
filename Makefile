@@ -6,7 +6,7 @@ endif
 
 CURRENT_DIR     = $(dir $(abspath $(lastword $(MAKEFILE_LIST))))
 TF_EXAMPLES     = $(sort $(dir $(wildcard $(CURRENT_DIR)examples/*/)))
-TF_DOCS_VERSION = 0.6.0
+TF_DOCS_VERSION = 0.7.0
 
 # Adjust your delimiter here or overwrite via make arguments
 DELIM_START = <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

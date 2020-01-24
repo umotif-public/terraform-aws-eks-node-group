@@ -130,6 +130,9 @@ resource "aws_iam_role_policy_attachment" "main_AmazonEC2ContainerRegistryReadOn
 module "eks-node-group-a" {
   source = "../../"
 
+  enabled         = true
+  create_iam_role = false
+
   cluster_name  = aws_eks_cluster.cluster.id
   node_role_arn = aws_iam_role.main.arn
   subnet_ids    = [module.vpc.private_subnets[0]]
@@ -155,6 +158,9 @@ module "eks-node-group-a" {
 module "eks-node-group-b" {
   source = "../../"
 
+  enabled         = true
+  create_iam_role = false
+
   cluster_name  = aws_eks_cluster.cluster.id
   node_role_arn = aws_iam_role.main.arn
   subnet_ids    = [module.vpc.private_subnets[1]]
@@ -179,6 +185,9 @@ module "eks-node-group-b" {
 
 module "eks-node-group-c" {
   source = "../../"
+
+  enabled         = true
+  create_iam_role = false
 
   cluster_name  = aws_eks_cluster.cluster.id
   node_role_arn = aws_iam_role.main.arn

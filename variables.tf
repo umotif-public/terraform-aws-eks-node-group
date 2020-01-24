@@ -82,3 +82,16 @@ variable "source_security_group_ids" {
   default     = []
   description = "Set of EC2 Security Group IDs to allow SSH access (port 22) from on the worker nodes. If you specify `ec2_ssh_key`, but do not specify this configuration when you create an EKS Node Group, port 22 on the worker nodes is opened to the Internet (0.0.0.0/0)"
 }
+
+variable "enabled" {
+  type        = bool
+  description = "Whether to create the resources. Set to `false` to prevent the module from creating any resources"
+  default     = true
+}
+
+variable "create_iam_role" {
+  type        = bool
+  description = "Create IAM role for node group. Set to false if pass `node_role_arn` as an argument"
+  default     = true
+}
+
