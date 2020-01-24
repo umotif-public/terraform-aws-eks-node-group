@@ -21,7 +21,7 @@ resource "aws_eks_node_group" "main" {
   count = var.enabled ? 1 : 0
 
   cluster_name    = var.cluster_name
-  node_group_name = join("-", [var.cluster_name, random_id.main[0].id])
+  node_group_name = join("-", [var.cluster_name, random_id.main[0].hex])
   node_role_arn   = var.node_role_arn == "" ? join("", aws_iam_role.main.*.arn) : var.node_role_arn
 
   subnet_ids = var.subnet_ids
