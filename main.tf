@@ -1,5 +1,5 @@
 resource "random_id" "main" {
-  count = var.enabled ? 1 : 0
+  count = var.enabled && var.node_group_name == "" ? 1 : 0
 
   byte_length = 4
 
@@ -21,7 +21,7 @@ resource "aws_eks_node_group" "main" {
   count = var.enabled ? 1 : 0
 
   cluster_name    = var.cluster_name
-  node_group_name = join("-", [var.cluster_name, random_id.main[0].hex])
+  node_group_name = var.node_group_name == "" ? join("-", [var.cluster_name, random_id.main[0].hex]) : var.node_group_name
   node_role_arn   = var.node_role_arn == "" ? join("", aws_iam_role.main.*.arn) : var.node_role_arn
 
   subnet_ids = var.subnet_ids
@@ -59,7 +59,7 @@ resource "aws_eks_node_group" "main" {
 resource "aws_iam_role" "main" {
   count = var.enabled && var.create_iam_role ? 1 : 0
 
-  name = "${var.cluster_name}-managed-group-node"
+  name = var.node_group_role_name == "" ? "${var.cluster_name}-managed-group-node" : var.node_group_role_name
 
   assume_role_policy = <<EOF
 {

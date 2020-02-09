@@ -95,3 +95,14 @@ variable "create_iam_role" {
   default     = true
 }
 
+variable "node_group_name" {
+  type        = string
+  description = "The name of the cluster node group. Defaults to <cluster_name>-<random value>"
+  default     = ""
+}
+
+variable "node_group_role_name" {
+  type        = string
+  description = "The name of the cluster node group role. Defaults to <cluster_name>-managed-group-node"
+  default     = ""
+}
