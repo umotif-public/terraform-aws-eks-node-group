@@ -7,14 +7,14 @@ This module will create EKS managed Node Group that will join your existing Kube
 
 ## Terraform versions
 
-Terraform 0.12. Pin module version to `~> v1.0`. Submit pull-requests to `master` branch.
+Terraform 0.12. Pin module version to `~> v2.0`. Submit pull-requests to `master` branch.
 
 ## Usage
 
 ```hcl
 module "eks-node-group" {
   source = "umotif-public/eks-node-group/aws"
-  version = "~> 1.0.0"
+  version = "~> 2.0.0"
 
   enabled      = true
   cluster_name = aws_eks_cluster.cluster.id
@@ -32,6 +32,8 @@ module "eks-node-group" {
   kubernetes_labels = {
     lifecycle = "OnDemand"
   }
+
+  force_update_version = true
 
   tags = {
     Environment = "test"
@@ -55,13 +57,15 @@ Module managed by [Marcin Cuber](https://github.com/marcincuber) [LinkedIn](http
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Requirements
 
-No requirements.
+| Name | Version |
+|------|---------|
+| aws | ~> 2.63 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | n/a |
+| aws | ~> 2.63 |
 | random | n/a |
 
 ## Inputs
@@ -76,6 +80,7 @@ No requirements.
 | disk\_size | Disk size in GiB for worker nodes. Defaults to 20. Terraform will only perform drift detection if a configuration value is provided | `number` | `20` | no |
 | ec2\_ssh\_key | SSH key name that should be used to access the worker nodes | `string` | `null` | no |
 | enabled | Whether to create the resources. Set to `false` to prevent the module from creating any resources | `bool` | `true` | no |
+| force\_update\_version | Force version update if existing pods are unable to be drained due to a pod disruption budget issue. | `bool` | `false` | no |
 | instance\_types | Set of instance types associated with the EKS Node Group. Defaults to ["t3.medium"]. Terraform will only perform drift detection if a configuration value is provided | `list(string)` | <pre>[<br>  "t3.medium"<br>]</pre> | no |
 | kubernetes\_labels | Key-value mapping of Kubernetes labels. Only labels that are applied with the EKS API are managed by this argument. Other Kubernetes labels applied to the EKS Node Group will not be managed | `map(string)` | `{}` | no |
 | kubernetes\_version | Kubernetes version. Defaults to EKS Cluster Kubernetes version. Terraform will only perform drift detection if a configuration value is provided | `string` | `null` | no |
