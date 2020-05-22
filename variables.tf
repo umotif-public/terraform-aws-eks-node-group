@@ -106,3 +106,9 @@ variable "node_group_role_name" {
   description = "The name of the cluster node group role. Defaults to <cluster_name>-managed-group-node"
   default     = ""
 }
+
+variable "force_update_version" {
+  type        = bool
+  description = "Force version update if existing pods are unable to be drained due to a pod disruption budget issue."
+  default     = false
+}

@@ -34,6 +34,8 @@ resource "aws_eks_node_group" "main" {
   release_version = var.ami_release_version
   version         = var.kubernetes_version
 
+  force_update_version = var.force_update_version
+
   tags = var.tags
 
   scaling_config {
