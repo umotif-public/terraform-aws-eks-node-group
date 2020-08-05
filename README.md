@@ -59,13 +59,14 @@ Module managed by [Marcin Cuber](https://github.com/marcincuber) [LinkedIn](http
 
 | Name | Version |
 |------|---------|
-| aws | ~> 2.63 |
+| terraform | >= 0.12.6, < 0.14 |
+| aws | >= 2.63, < 4.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | ~> 2.63 |
+| aws | >= 2.63, < 4.0 |
 | random | n/a |
 
 ## Inputs
