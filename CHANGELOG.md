@@ -5,7 +5,14 @@ All notable changes to this project will be documented in this file.
 <a name="unreleased"></a>
 ## [Unreleased]
 
-- update docs and add chglog
+- Update module versions to support v3 provider
+
+
+<a name="2.0.0"></a>
+## [2.0.0] - 2020-05-22
+
+- Lock minimum version of provider and add force_update_version ([#4](https://github.com/umotif-public/terraform-aws-eks-node-group/issues/4))
+- Feature/updates ([#3](https://github.com/umotif-public/terraform-aws-eks-node-group/issues/3))
 
 
 <a name="1.0.3"></a>
@@ -34,7 +41,8 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/1.0.3...HEAD
+[Unreleased]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/2.0.0...HEAD
+[2.0.0]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/1.0.3...2.0.0
 [1.0.3]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/1.0.2...1.0.3
 [1.0.2]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/1.0.0...1.0.1
