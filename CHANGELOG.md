@@ -5,7 +5,18 @@ All notable changes to this project will be documented in this file.
 <a name="unreleased"></a>
 ## [Unreleased]
 
-- Update module versions to support v3 provider
+
+
+<a name="3.0.0"></a>
+## [3.0.0] - 2020-09-01
+
+- Add support for launch template and tf 0.13 ([#6](https://github.com/umotif-public/terraform-aws-eks-node-group/issues/6))
+
+
+<a name="2.0.1"></a>
+## [2.0.1] - 2020-08-05
+
+- Feature/v3 provider support ([#5](https://github.com/umotif-public/terraform-aws-eks-node-group/issues/5))
 
 
 <a name="2.0.0"></a>
@@ -41,7 +52,9 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/2.0.0...HEAD
+[Unreleased]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/2.0.1...3.0.0
+[2.0.1]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/1.0.3...2.0.0
 [1.0.3]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/1.0.2...1.0.3
 [1.0.2]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/1.0.1...1.0.2
