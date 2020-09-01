@@ -7,7 +7,7 @@ provider "aws" {
 #####
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "2.21.0"
+  version = "2.48.0"
 
   name = "simple-vpc"
 
@@ -46,7 +46,7 @@ resource "aws_eks_cluster" "cluster" {
   enabled_cluster_log_types = []
   name                      = "eks"
   role_arn                  = aws_iam_role.cluster.arn
-  version                   = "1.14"
+  version                   = "1.17"
 
   vpc_config {
     subnet_ids              = flatten([module.vpc.public_subnets, module.vpc.private_subnets])
@@ -94,7 +94,6 @@ module "eks-node-group" {
   node_group_name      = "example-nodegroup"
   node_group_role_name = "example-nodegroup"
 
-  enabled      = true
   cluster_name = aws_eks_cluster.cluster.id
 
   subnet_ids = flatten([module.vpc.private_subnets])
