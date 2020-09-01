@@ -86,6 +86,47 @@ resource "aws_iam_role_policy_attachment" "cluster_AmazonEKSServicePolicy" {
 }
 
 #####
+# Launch Template with AMI
+#####
+data "aws_ssm_parameter" "cluster" {
+  name = "/aws/service/eks/optimized-ami/${aws_eks_cluster.cluster.version}/amazon-linux-2/recommended/image_id"
+}
+
+data "aws_launch_template" "cluster" {
+  name = aws_launch_template.cluster.name
+
+  depends_on = [aws_launch_template.cluster]
+}
+
+resource "aws_launch_template" "cluster" {
+  image_id               = data.aws_ssm_parameter.cluster.value
+  instance_type          = "t3.medium"
+  name                   = "eks-launch-template-test"
+  update_default_version = true
+
+  key_name = "eks-test"
+
+  block_device_mappings {
+    device_name = "/dev/sda1"
+
+    ebs {
+      volume_size = 20
+    }
+  }
+
+  tag_specifications {
+    resource_type = "instance"
+
+    tags = {
+      Name                        = "eks-node-group-instance-name"
+      "kubernetes.io/cluster/eks" = "owned"
+    }
+  }
+
+  user_data = base64encode(templatefile("userdata.tpl", { CLUSTER_NAME = aws_eks_cluster.cluster.name, B64_CLUSTER_CA = aws_eks_cluster.cluster.certificate_authority[0].data, API_SERVER_URL = aws_eks_cluster.cluster.endpoint }))
+}
+
+#####
 # EKS Node Group
 #####
 module "eks-node-group" {
@@ -99,13 +140,19 @@ module "eks-node-group" {
   min_size     = 1
   max_size     = 1
 
-  ec2_ssh_key = "eks-test"
+  launch_template = {
+    id      = data.aws_launch_template.cluster.id
+    version = data.aws_launch_template.cluster.latest_version
+  }
 
   kubernetes_labels = {
     lifecycle = "OnDemand"
   }
 
   tags = {
-    Environment = "test"
+    "kubernetes.io/cluster/eks" = "owned"
+    Environment                 = "test"
   }
+
+  depends_on = [data.aws_launch_template.cluster]
 }

@@ -1,25 +1,25 @@
 resource "random_id" "main" {
-  count = var.enabled && var.node_group_name == "" ? 1 : 0
+  count = var.node_group_name == "" ? 1 : 0
 
   byte_length = 4
 
   keepers = {
     ami_type       = var.ami_type
     disk_size      = var.disk_size
-    instance_types = join("|", var.instance_types)
+    instance_types = var.instance_types != null ? join("|", var.instance_types) : ""
     node_role_arn  = var.node_role_arn
 
     ec2_ssh_key               = var.ec2_ssh_key
     source_security_group_ids = join("|", var.source_security_group_ids)
 
-    subnet_ids   = join("|", var.subnet_ids)
-    cluster_name = var.cluster_name
+    subnet_ids           = join("|", var.subnet_ids)
+    cluster_name         = var.cluster_name
+    launch_template_id   = lookup(var.launch_template, "id", "")
+    launch_template_name = lookup(var.launch_template, "name", "")
   }
 }
 
 resource "aws_eks_node_group" "main" {
-  count = var.enabled ? 1 : 0
-
   cluster_name    = var.cluster_name
   node_group_name = var.node_group_name == "" ? join("-", [var.cluster_name, random_id.main[0].hex]) : var.node_group_name
   node_role_arn   = var.node_role_arn == "" ? join("", aws_iam_role.main.*.arn) : var.node_role_arn
@@ -52,6 +52,15 @@ resource "aws_eks_node_group" "main" {
     }
   }
 
+  dynamic "launch_template" {
+    for_each = length(var.launch_template) == 0 ? [] : [var.launch_template]
+    content {
+      id      = lookup(launch_template.value, "id", null)
+      name    = lookup(launch_template.value, "name", null)
+      version = lookup(launch_template.value, "version")
+    }
+  }
+
   lifecycle {
     create_before_destroy = true
     ignore_changes        = [scaling_config.0.desired_size]
@@ -59,7 +68,7 @@ resource "aws_eks_node_group" "main" {
 }
 
 resource "aws_iam_role" "main" {
-  count = var.enabled && var.create_iam_role ? 1 : 0
+  count = var.create_iam_role ? 1 : 0
 
   name = var.node_group_role_name == "" ? "${var.cluster_name}-managed-group-node" : var.node_group_role_name
 
@@ -80,21 +89,21 @@ EOF
 }
 
 resource "aws_iam_role_policy_attachment" "main_AmazonEKSWorkerNodePolicy" {
-  count = var.enabled && var.create_iam_role ? 1 : 0
+  count = var.create_iam_role ? 1 : 0
 
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSWorkerNodePolicy"
   role       = aws_iam_role.main[0].name
 }
 
 resource "aws_iam_role_policy_attachment" "main_AmazonEKS_CNI_Policy" {
-  count = var.enabled && var.create_iam_role ? 1 : 0
+  count = var.create_iam_role ? 1 : 0
 
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKS_CNI_Policy"
   role       = aws_iam_role.main[0].name
 }
 
 resource "aws_iam_role_policy_attachment" "main_AmazonEC2ContainerRegistryReadOnly" {
-  count = var.enabled && var.create_iam_role ? 1 : 0
+  count = var.create_iam_role ? 1 : 0
 
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
   role       = aws_iam_role.main[0].name

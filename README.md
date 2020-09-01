@@ -3,20 +3,19 @@ Terraform module to provision EKS Managed Node Group
 
 ## Resources created
 
-This module will create EKS managed Node Group that will join your existing Kubernetes cluster.
+This module will create EKS managed Node Group that will join your existing Kubernetes cluster. It supports use of launch template which will allow you to further enhance and modify worker nodes.
 
 ## Terraform versions
 
-Terraform 0.12. Pin module version to `~> v2.0`. Submit pull-requests to `master` branch.
+Terraform 0.12. Pin module version to `~> v3.0`. Submit pull-requests to `master` branch.
 
 ## Usage
 
 ```hcl
 module "eks-node-group" {
   source = "umotif-public/eks-node-group/aws"
-  version = "~> 2.0.0"
+  version = "~> 3.0.0"
 
-  enabled      = true
   cluster_name = aws_eks_cluster.cluster.id
 
   subnet_ids = ["subnet-1","subnet-2","subnet-3"]
@@ -43,12 +42,14 @@ module "eks-node-group" {
 
 ## Assumptions
 
-Module is to be used with Terraform > 0.12.
+Module is to be used with Terraform > 0.13. Fully working with Terraform 0.12 as well.
 
 ## Examples
 
 * [EKS Node Group- single](https://github.com/umotif-public/terraform-aws-eks-node-group/tree/master/examples/single-node-group)
 * [EKS Node Group- multiple az setup](https://github.com/umotif-public/terraform-aws-eks-node-group/tree/master/examples/multiaz-node-group)
+* [EKS Node Group- single named node group](https://github.com/umotif-public/terraform-aws-eks-node-group/tree/master/examples/single-named-node-group)
+* [EKS Node Group- single with launch template](https://github.com/umotif-public/terraform-aws-eks-node-group/tree/master/examples/single-node-group-with-launch-template)
 
 ## Authors
 
