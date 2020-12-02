@@ -24,7 +24,8 @@ module "eks-node-group" {
   min_size     = 1
   max_size     = 1
 
-  instance_types = ["t3.large"]
+  instance_types = ["t3.large","t2.large"]
+  capacity_type  = "SPOT"
 
   ec2_ssh_key = "eks-test"
 
@@ -61,13 +62,13 @@ Module managed by [Marcin Cuber](https://github.com/marcincuber) [LinkedIn](http
 | Name | Version |
 |------|---------|
 | terraform | >= 0.12.6 |
-| aws | >= 2.63 |
+| aws | >= 3.19 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| aws | >= 2.63 |
+| aws | >= 3.19 |
 | random | n/a |
 
 ## Inputs
@@ -75,17 +76,18 @@ Module managed by [Marcin Cuber](https://github.com/marcincuber) [LinkedIn](http
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | ami\_release\_version | AMI version of the EKS Node Group. Defaults to latest version for Kubernetes version | `string` | `null` | no |
-| ami\_type | Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Defaults to `AL2_x86_64`. Valid values: `AL2_x86_64`, `AL2_x86_64_GPU`. Terraform will only perform drift detection if a configuration value is provided | `string` | `"AL2_x86_64"` | no |
+| ami\_type | Type of Amazon Machine Image (AMI) associated with the EKS Node Group. Valid values: `AL2_x86_64`, `AL2_x86_64_GPU`. Terraform will only perform drift detection if a configuration value is provided | `string` | `null` | no |
+| capacity\_type | Type of capacity associated with the EKS Node Group. Defaults to ON\_DEMAND. Valid values: ON\_DEMAND, SPOT. | `string` | `"ON_DEMAND"` | no |
 | cluster\_name | The name of the EKS cluster | `string` | n/a | yes |
 | create\_iam\_role | Create IAM role for node group. Set to false if pass `node_role_arn` as an argument | `bool` | `true` | no |
 | desired\_size | Desired number of worker nodes | `number` | n/a | yes |
-| disk\_size | Disk size in GiB for worker nodes. Defaults to 20. Terraform will only perform drift detection if a configuration value is provided | `number` | `20` | no |
+| disk\_size | Disk size in GiB for worker nodes. Defaults to 20. Terraform will only perform drift detection if a configuration value is provided | `number` | `null` | no |
 | ec2\_ssh\_key | SSH key name that should be used to access the worker nodes | `string` | `null` | no |
-| enabled | Whether to create the resources. Set to `false` to prevent the module from creating any resources | `bool` | `true` | no |
 | force\_update\_version | Force version update if existing pods are unable to be drained due to a pod disruption budget issue. | `bool` | `false` | no |
-| instance\_types | Set of instance types associated with the EKS Node Group. Defaults to ["t3.medium"]. Terraform will only perform drift detection if a configuration value is provided | `list(string)` | <pre>[<br>  "t3.medium"<br>]</pre> | no |
+| instance\_types | List of instance types associated with the EKS Node Group. Terraform will only perform drift detection if a configuration value is provided | `list(string)` | `null` | no |
 | kubernetes\_labels | Key-value mapping of Kubernetes labels. Only labels that are applied with the EKS API are managed by this argument. Other Kubernetes labels applied to the EKS Node Group will not be managed | `map(string)` | `{}` | no |
 | kubernetes\_version | Kubernetes version. Defaults to EKS Cluster Kubernetes version. Terraform will only perform drift detection if a configuration value is provided | `string` | `null` | no |
+| launch\_template | Configuration block with Launch Template settings. `name`, `id` and `version` parameters are available. | `map(string)` | `{}` | no |
 | max\_size | Maximum number of worker nodes | `number` | n/a | yes |
 | min\_size | Minimum number of worker nodes | `number` | n/a | yes |
 | node\_group\_name | The name of the cluster node group. Defaults to <cluster\_name>-<random value> | `string` | `""` | no |

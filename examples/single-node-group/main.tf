@@ -7,7 +7,7 @@ provider "aws" {
 #####
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "2.48.0"
+  version = "2.64.0"
 
   name = "simple-vpc"
 
@@ -46,7 +46,7 @@ resource "aws_eks_cluster" "cluster" {
   enabled_cluster_log_types = []
   name                      = "eks"
   role_arn                  = aws_iam_role.cluster.arn
-  version                   = "1.17"
+  version                   = "1.18"
 
   vpc_config {
     subnet_ids              = flatten([module.vpc.public_subnets, module.vpc.private_subnets])
@@ -95,14 +95,17 @@ module "eks-node-group" {
 
   subnet_ids = flatten([module.vpc.private_subnets])
 
-  desired_size = 1
-  min_size     = 1
-  max_size     = 1
+  desired_size = 2
+  min_size     = 2
+  max_size     = 2
+
+  capacity_type  = "SPOT"
+  instance_types = ["t3.medium", "t2.medium"]
 
   ec2_ssh_key = "eks-test"
 
   kubernetes_labels = {
-    lifecycle = "OnDemand"
+    lifecycle = "SPOT"
   }
 
   tags = {

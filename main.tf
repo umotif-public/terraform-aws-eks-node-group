@@ -7,6 +7,7 @@ resource "random_id" "main" {
     ami_type       = var.ami_type
     disk_size      = var.disk_size
     instance_types = var.instance_types != null ? join("|", var.instance_types) : ""
+    capacity_type  = var.capacity_type
     node_role_arn  = var.node_role_arn
 
     ec2_ssh_key               = var.ec2_ssh_key
@@ -29,6 +30,7 @@ resource "aws_eks_node_group" "main" {
   ami_type       = var.ami_type
   disk_size      = var.disk_size
   instance_types = var.instance_types
+  capacity_type  = var.capacity_type
   labels         = var.kubernetes_labels
 
   release_version = var.ami_release_version

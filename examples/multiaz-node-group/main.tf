@@ -7,7 +7,7 @@ provider "aws" {
 #####
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
-  version = "2.48.0"
+  version = "2.64.0"
 
   name = "simple-vpc"
 
@@ -46,7 +46,7 @@ resource "aws_eks_cluster" "cluster" {
   enabled_cluster_log_types = []
   name                      = "eks"
   role_arn                  = aws_iam_role.cluster.arn
-  version                   = "1.17"
+  version                   = "1.18"
 
   vpc_config {
     subnet_ids              = flatten([module.vpc.public_subnets, module.vpc.private_subnets])
