@@ -112,3 +112,9 @@ variable "launch_template" {
   description = "Configuration block with Launch Template settings. `name`, `id` and `version` parameters are available."
   default     = {}
 }
+
+variable "capacity_type" {
+  type        = string
+  description = "Type of capacity associated with the EKS Node Group. Defaults to ON_DEMAND. Valid values: ON_DEMAND, SPOT."
+  default     = "ON_DEMAND"
+}
