@@ -1,3 +1,5 @@
+![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/umotif-public/terraform-aws-eks-node-group?style=social)
+
 # terraform-aws-eks-node-group
 Terraform module to provision EKS Managed Node Group
 
