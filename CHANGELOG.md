@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 <a name="unreleased"></a>
 ## [Unreleased]
 
+- Upgrade module to support tains and node group name prefix
+
+
+<a name="3.1.0"></a>
+## [3.1.0] - 2020-12-02
+
+- Add support for capacity_type ([#9](https://github.com/umotif-public/terraform-aws-eks-node-group/issues/9))
+
+
+<a name="3.0.1"></a>
+## [3.0.1] - 2020-11-09
+
+- Update module to remove 0.14 limit ([#8](https://github.com/umotif-public/terraform-aws-eks-node-group/issues/8))
+- Update changelog
 
 
 <a name="3.0.0"></a>
@@ -52,7 +66,9 @@ All notable changes to this project will be documented in this file.
 - Initial commit
 
 
-[Unreleased]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/3.0.0...HEAD
+[Unreleased]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/3.1.0...HEAD
+[3.1.0]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/3.0.1...3.1.0
+[3.0.1]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/3.0.0...3.0.1
 [3.0.0]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/2.0.1...3.0.0
 [2.0.1]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/umotif-public/terraform-aws-eks-node-group/compare/1.0.3...2.0.0

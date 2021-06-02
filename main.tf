@@ -1,5 +1,5 @@
 resource "random_id" "main" {
-  count = var.node_group_name == "" ? 1 : 0
+  count = var.node_group_name == null && var.node_group_name_prefix == null ? 1 : 0
 
   byte_length = 4
 
@@ -21,9 +21,11 @@ resource "random_id" "main" {
 }
 
 resource "aws_eks_node_group" "main" {
-  cluster_name    = var.cluster_name
-  node_group_name = var.node_group_name == "" ? join("-", [var.cluster_name, random_id.main[0].hex]) : var.node_group_name
-  node_role_arn   = var.node_role_arn == "" ? join("", aws_iam_role.main.*.arn) : var.node_role_arn
+  cluster_name = var.cluster_name
+
+  node_group_name_prefix = var.node_group_name_prefix
+  node_group_name        = var.node_group_name == null && var.node_group_name_prefix == null ? join("-", [var.cluster_name, random_id.main[0].hex]) : var.node_group_name
+  node_role_arn          = var.node_role_arn == "" ? join("", aws_iam_role.main.*.arn) : var.node_role_arn
 
   subnet_ids = var.subnet_ids
 
@@ -31,7 +33,8 @@ resource "aws_eks_node_group" "main" {
   disk_size      = var.disk_size
   instance_types = var.instance_types
   capacity_type  = var.capacity_type
-  labels         = var.kubernetes_labels
+
+  labels = var.labels
 
   release_version = var.ami_release_version
   version         = var.kubernetes_version
@@ -44,6 +47,15 @@ resource "aws_eks_node_group" "main" {
     desired_size = var.desired_size
     max_size     = var.max_size
     min_size     = var.min_size
+  }
+
+  dynamic "taint" {
+    for_each = var.taints
+    content {
+      key    = lookup(taint.value, "key")
+      value  = lookup(taint.value, "value")
+      effect = lookup(taint.value, "effect")
+    }
   }
 
   dynamic "remote_access" {

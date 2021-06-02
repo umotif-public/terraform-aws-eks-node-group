@@ -59,7 +59,7 @@ variable "instance_types" {
   default     = null
 }
 
-variable "kubernetes_labels" {
+variable "labels" {
   type        = map(string)
   description = "Key-value mapping of Kubernetes labels. Only labels that are applied with the EKS API are managed by this argument. Other Kubernetes labels applied to the EKS Node Group will not be managed"
   default     = {}
@@ -92,7 +92,13 @@ variable "create_iam_role" {
 variable "node_group_name" {
   type        = string
   description = "The name of the cluster node group. Defaults to <cluster_name>-<random value>"
-  default     = ""
+  default     = null
+}
+
+variable "node_group_name_prefix" {
+  type        = string
+  description = "Creates a unique name beginning with the specified prefix. Conflicts with node_group_name"
+  default     = null
 }
 
 variable "node_group_role_name" {
@@ -117,4 +123,10 @@ variable "capacity_type" {
   type        = string
   description = "Type of capacity associated with the EKS Node Group. Defaults to ON_DEMAND. Valid values: ON_DEMAND, SPOT."
   default     = "ON_DEMAND"
+}
+
+variable "taints" {
+  type        = list(object({ key = string, value = any, effect = string }))
+  description = "List of objects containing Kubernetes taints which will be applied to the nodes in the node group. Maximum of 50 taints per node group."
+  default     = []
 }
