@@ -100,6 +100,8 @@ resource "aws_iam_role" "main" {
   ]
 }
 EOF
+
+  tags = var.tags
 }
 
 resource "aws_iam_role_policy_attachment" "main_AmazonEKSWorkerNodePolicy" {
